@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            async function showCommunities() {
+                await fetch('/communities')
+                .then((res) => {return res.json()})
+                .then((data) => {
+                    var div = document.getElementById('community-list')
+                    div.innerHTML = ''
+                    for(var community of data){
+                        div.innerHTML += `<div class='community-card' onclick=''>${community.name}: ${community.description}</div>`
+                    }
+                })
+                .catch((error) => {console.log(error)})
+            }
+
+            function openForm() {
+                document.getElementById("popup").style.display = "block"
+            }
+
+            async function submitForm(e){
+                e.preventDefault()
+                await fetch('/communities',{
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        name: document.getElementById('name').value,
+                        description: document.getElementById('description').value
+                    })
+                })
+                closeForm();
+            }
+
+            function closeForm() {
+                showCommunities();
+                document.getElementById('popup').style.display = 'none';
+            }
+        </script>
+    </head>
+    <body onload="showCommunities()">
+        <h1>Communities</h1>
+        <div>
+            <button onclick="openForm()">Create Community</button>
+        </div>
+
+        <div id="popup" style="display: none;">
+            <form onsubmit="submitForm(event)">
+                <label>
+                    Name: 
+                    <input name="name" type="text" id="name" required placeholder="Community Name">
+                </label>
+                <label>
+                    Description
+                    <input type="text" name="description" id="description" placeholder="Description">
+                </label>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <div id="community-list"></div>
+    </body>
+</html>
