@@ -1,14 +1,11 @@
 var express = require('express');
 var router = express.Router();
-const { getDB } = require('../db/mongo');
-// FIXME: should use endpoints of db/communityQueries.js and not getDB
+const communityQs = require('../db/communityQueries');
 
 //Gets all communities
 router.get("/", async (req, res) => {
     try {
-        const db = getDB();
-        // temp db.collection.find -> getAllCommunities() or something
-        const communities = await db.collection('communities').find().toArray();
+        const communities = await communityQs.getAllCommunities();
         res.json(communities);
     } catch (err) {
         console.error("Error getting communities:", err);
