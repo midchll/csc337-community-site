@@ -4,6 +4,12 @@
 const { MongoClient, ObjectId } = require('mongodb');
 const mongoUrl = "mongodb://127.0.0.1:27017/";
 const client = new MongoClient(mongoUrl);
+const crypto = require('crypto');
+
+// hashing using the same exact hashing method as the account creation
+function hashed(password) {
+    return crypto.createHash('sha256').update(password).digest('hex');
+}
 
 // Inserts dummy data into the database
 async function insertDocuments() {
@@ -22,10 +28,10 @@ async function insertDocuments() {
         // --- Insert test users
         // added email field missing on collection diagram
         const testUsers = [
-            { name: "Jacob", email: "jacob@gmail.com", pass: "12345"},
-            { name: "Kayvon", email: "kayvon@gmail.com", pass: "12345"},
-            { name: "Mitch", email: "mitch@gmail.com", pass: "12345"},
-            { name: "dev", email: "dev@gmail.com", pass: "12345"}
+            { name: "Jacob", email: "jacob@gmail.com", password: hashed("12345") },
+            { name: "Kayvon", email: "kayvon@gmail.com", password: hashed("12345") },
+            { name: "Mitch", email: "mitch@gmail.com", password: hashed("12345") },
+            { name: "dev", email: "dev@gmail.com", password: hashed("12345") }
         ];
         await db.collection("userCollection").insertMany(testUsers);
         console.log(" * inserted test users");
