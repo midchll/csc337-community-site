@@ -8,4 +8,9 @@ async function getAllCommunities() {
     return db.collection('communityCollection').find().toArray();
 }
 
-module.exports = { getAllCommunities };
+async function createCommunity(community) {
+    const db = getDB();
+    return db.collection('communityCollection').insertOne(community)
+}
+
+module.exports = { getAllCommunities, createCommunity };

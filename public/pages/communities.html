@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="/styles/communities.css">
         <script>
             async function showCommunities() {
                 await fetch('/communities')
@@ -9,7 +10,7 @@
                     var div = document.getElementById('community-list')
                     div.innerHTML = ''
                     for(var community of data){
-                        div.innerHTML += `<div class='community-card' onclick=''>${community.name}: ${community.description}</div>`
+                        div.innerHTML = `<div class='community-card' onclick=''>${community.name}: ${community.description}</div>` + div.innerHTML
                     }
                 })
                 .catch((error) => {console.log(error)})
@@ -21,7 +22,7 @@
 
             async function submitForm(e){
                 e.preventDefault()
-                await fetch('/communities',{
+                await fetch('/communities/create',{
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -39,8 +40,8 @@
         </script>
     </head>
     <body onload="showCommunities()">
-        <h1>Communities</h1>
-        <div>
+        <div id="header">
+            <h1>Communities</h1>
             <button onclick="openForm()">Create Community</button>
         </div>
 
@@ -49,15 +50,17 @@
                 <label>
                     Name: 
                     <input name="name" type="text" id="name" required placeholder="Community Name">
+                    <br>
                 </label>
                 <label>
                     Description
                     <input type="text" name="description" id="description" placeholder="Description">
+                    <br>
                 </label>
                 <button type="submit">Submit</button>
             </form>
         </div>
-
+        
         <div id="community-list"></div>
     </body>
 </html>
