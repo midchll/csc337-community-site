@@ -8,6 +8,9 @@ const userQs = require('../db/userQueries');
 router.post('/create', async (req, res) => {
     try {
         var { name, email, password } = req.body;
+        if (!email || !password) {
+            return res.json({ error: 'Missing account details' });
+        }
 
         const hashed = crypto
             .createHash('sha256')
@@ -45,7 +48,8 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid credentials.' });
         }
         // Success, assign id to session
-        req.session.userId = storedUser._id;
+        req.session.user = { id: storedUser._id, name: storedUse.name, email: storedUser.email };
+        console.log(req.session.user);
         return res.json({ message: 'Login Successful' });
 
     } catch (err) {

@@ -22,10 +22,19 @@ async function startServer() {
     });
 }
 
+// Get details of logged in user
+app.get("/session", (req, res) => {
+    if (req.session.user) {
+        res.json( req.session );
+    } else {
+        res.status(401).json({});
+    }
+})
+
 //Pages
 app.get('/', (req, res) => {
     // Setting the root to login, existing sessions redirect to communities
-    if (req.session.user) return res.redirect('/communities');
+    if (req.session.user) return res.redirect('/communitiespage');
     else return res.redirect('/login');
     //res.sendFile(__dirname + '/public/pages/login.html');
 });
@@ -34,7 +43,7 @@ app.get('/login', (req, res) => {
     res.sendFile(__dirname + '/public/pages/login.html');
 })
 
-app.get('/communities', (req, res) => {
+app.get('/communitiespage', (req, res) => {
     res.sendFile(__dirname + '/public/pages/communities.html');
 });
 

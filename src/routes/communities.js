@@ -20,7 +20,6 @@ router.post("/create", (req, res) => {
     communities.push({
         name: req.body.name,
         description: req.body.description,
-        id: id++
     });
     res.json({ community: communities[communities.length - 1] });
 });
