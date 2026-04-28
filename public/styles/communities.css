@@ -1,0 +1,17 @@
+body {
+    background-color: rgb(53, 235, 53);
+
+}
+
+#header {
+    background-color: rgb(252, 86, 172);
+
+}
+
+#popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+}

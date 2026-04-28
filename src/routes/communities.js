@@ -14,14 +14,18 @@ router.get("/", async (req, res) => {
 });
 
 //Appends a community and returns it
-// FIXME: db functionality
-let communities = []; // TEMP
-router.post("/create", (req, res) => {
-    communities.push({
-        name: req.body.name,
-        description: req.body.description,
-    });
-    res.json({ community: communities[communities.length - 1] });
+router.post("/create", async (req, res) => {
+    try {
+        const community = {
+            name: req.body.name,
+            description: req.body.description,
+        }
+        const response = await communityQs.createCommunity(community);
+        res.json(response);
+    } catch (err) {
+        console.error("Error creating community:", err);
+        res.json({error: "failed to create community"});
+    }
 });
 
 module.exports = router;
