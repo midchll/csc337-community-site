@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/main.css">
+    <title>Account Login</title>
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            visibility: visible;
+            gap: 1em;
+        }
+
+        .submit-button,
+        button {
+            width: fit-content;
+        }
+
+        .disabled {
+            display: none;
+            visibility: collapse;
+        }
+
+        .status-good {
+            background-color: green;
+            color: white;
+        }
+        .status-bad {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <!-- --- ACCOUNT CREATION FORM --- -->
+        <form id="create-account-form">
+            <p class="form-heading">Create Account</p>
+
+            <!-- EMAIL -->
+            <span class="form-group" id="email-group-create">
+                <label for="email-input-create">Email</label>
+                <input type="email" name="email" id="email-input-create" placeholder="name@example.com">
+            </span>
+
+            <!-- NAME -->
+             <span class="form-group" id="name-group-create">
+                <label for="name-input-create">Username</label>
+                <input type="text" name="name" id="name-input-create">
+            </span>
+
+            <!-- PASSWORD -->
+             <span class="form-group" id="password-group-create">
+                <label for="password-input-create">Password</label>
+                <input type="password" name="password" id="password-input-create">
+            </span>
+
+            <input class="submit-button" type="submit" value="Submit">
+
+            <button onclick="toggleForm('login-form')">I already have an account</button>
+        </form>
+
+        <!-- --- LOGIN FORM --- -->
+        <form class="disabled" id="login-form">
+            <p class="form-heading">Login</p>
+
+            <!-- EMAIL -->
+            <span class="form-group" id="email-group-login">
+                <label for="email-input-login">Email</label>
+                <input type="email" name="email" id="email-input-login" placeholder="name@example.com">
+            </span>
+
+            <!-- PASSWORD -->
+             <span class="form-group" id="password-group-login">
+                <label for="password-input-login">Password</label>
+                <input type="password" name="password" id="password-input-login">
+            </span>
+
+            <input class="submit-button" type="submit" value="Login">
+
+            <button onclick="toggleForm('create-account-form')">I don't have an account</button>
+        </form>
+
+        <div id="status-message"></div>
+    </main>
+
+    <!--<script src="/src/routes/auth.js"></script>-->
+    <script>;
+
+        // Shorthand
+        function $(id) { return document.getElementById(id); }
+
+        // Notify user of submission status
+        function showStatus(status, msg, time_ms) {
+            const element = $("status-message");
+            element.textContent = msg;
+            if (status === "success") element.classList = [ "status-good" ];
+            else element.classList = [ "status-bad" ];
+            setTimeout(() => {
+                element.classList = [ "disabled" ];
+            }, time_ms);
+        }
+
+        // Clear all inputs for both forms
+        function clearInputs() {
+            const inputs = document.getElementsByTagName("input");
+            for (const input of inputs) { if (input.type !== "submit") input.value = "" }
+        }
+
+        // Clear and hide all forms, then show target form
+        function toggleForm(id) {
+            const forms = document.getElementsByTagName("form");
+            const target = $(id);
+            clearInputs();
+
+            for (const form of forms) { form.classList.add("disabled"); }
+            target.classList.remove("disabled");
+        }
+
+        async function submitCreate(event) {
+            event.preventDefault();
+            const name = $("name-input-create").value.trim();
+            const email = $("name-input-create").value.trim();
+            const password = $("password-input-create").value.trim();
+
+            try {
+                const response = await fetch('/auth/create', {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email, password })
+                });
+                if (response.ok) {
+                    showStatus("success", "Account created. You will be redirected to login.", 3000);
+                    setTimeout(() => {
+                        clearInputs();
+                        toggleForm("login-form");
+                    }, 3000);
+                } else {
+                    showStatus("fail", "Account couldn't be created, ensure all info is present and correct.", 3000);
+                }
+            } catch (err) {
+                showStatus("fail", "Server error creating account.", 3000);
+            }
+        }
+
+        async function submitLogin(event) {
+            event.preventDefault();
+            const email = $("email-input-login").value.trim();
+            const password = $("password-input-login").value.trim();
+
+            try {
+                const response = await fetch('/auth/login', {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: email, password: password })
+                });
+
+                if (response.ok) {
+                    showStatus("success", "Login Successful", 1000);
+                    setTimeout(() => {
+                        // auth.js sets the session.user, can safely redirect
+                        window.location.href = "/communities";
+                    }, 1000);
+                } else {
+                    showStatus("fail", "Login unsuccessful, ensure email and password are present and correct.", 3000);
+                }
+            } catch (err) {
+                showStatus("fail", "Server error trying to log in.", 3000);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            $("create-account-form").addEventListener("submit", submitCreate);
+            $("login-form").addEventListener("submit", submitLogin);
+        });
+    </script>
+</body>
+</html>
