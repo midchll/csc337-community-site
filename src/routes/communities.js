@@ -20,11 +20,18 @@ router.post("/create", async (req, res) => {
             name: req.body.name,
             description: req.body.description,
         }
+
+
+
         const response = await communityQs.createCommunity(community);
+        if (response.error) {
+            return res.status(409).json(response);
+        }
+
         res.json(response);
     } catch (err) {
         console.error("Error creating community:", err);
-        res.json({error: "failed to create community"});
+        res.json({error: "Failed to create community"});
     }
 });
 

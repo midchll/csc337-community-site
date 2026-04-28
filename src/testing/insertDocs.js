@@ -16,7 +16,7 @@ async function insertDocuments() {
     try {
         await client.connect();
         console.log("\nConnected to mongodb...\n");
-        const db = client.db("communitySiteDB");
+        const db = client.db("CommunitySiteDB");
 
         // Resets, clears existing data if you were to call insertion again
         await db.collection("userCollection").deleteMany({});

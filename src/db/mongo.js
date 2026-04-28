@@ -12,7 +12,7 @@ async function connectDB() {
         return db;
     } else {
         await client.connect();
-        db = client.db('communitySiteDB');
+        db = client.db('CommunitySiteDB');
         console.log('connected to mongodb');
         return db;
     }

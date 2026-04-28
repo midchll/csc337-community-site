@@ -3,6 +3,8 @@
     <head>
         <link rel="stylesheet" href="/styles/communities.css">
         <script>
+
+            //show all communities in the list
             async function showCommunities() {
                 await fetch('/communities')
                 .then((res) => {return res.json()})
@@ -10,19 +12,27 @@
                     var div = document.getElementById('community-list')
                     div.innerHTML = ''
                     for(var community of data){
-                        div.innerHTML = `<div class='community-card' onclick=''>${community.name}: ${community.description}</div>` + div.innerHTML
+                        div.innerHTML = `<div class='community-card' onclick="openCommunity('${community._id}')"><div class='community-name'><h3>${community.name}</h3></div><div class='community-description'><p>${community.description}</p></div></div>` + div.innerHTML
                     }
                 })
                 .catch((error) => {console.log(error)})
             }
 
-            function openForm() {
-                document.getElementById("popup").style.display = "block"
+            //
+            async function openCommunity(id) {
+                window.location.href = `/posts/${id}`
             }
 
+            //Display pop up form
+            function openForm() {
+                document.getElementById("popup").style.display = "block"
+                document.getElementById('form-error').textContent = ''
+            }
+
+            //submit the form and load new communities
             async function submitForm(e){
                 e.preventDefault()
-                await fetch('/communities/create',{
+                const res = await fetch('/communities/create',{
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -30,9 +40,15 @@
                         description: document.getElementById('description').value.trim()
                     })
                 })
-                closeForm();
+                const data = await res.json()
+                if (data.error) {
+                    document.getElementById('form-error').textContent = data.error
+                } else {
+                    closeForm();
+                }
             }
 
+            //close the form
             function closeForm() {
                 showCommunities();
                 document.getElementById('popup').style.display = 'none';
@@ -45,31 +61,33 @@
             <div id="nav-links"></div>
         </nav>
         -->
-
-
-        <h1>Communities</h1>
         <div>
         <div id="header">
             <h1>Communities</h1>
-            <button onclick="openForm()">Create Community</button>
+            <button id="community-button" onclick="openForm()">Create Community</button>
         </div>
 
+        <!--Pop up form to make community-->
         <div id="popup" style="display: none;">
             <form onsubmit="submitForm(event)">
-                <label>
+                <label class="community-label">
                     Name:
                     <input name="name" type="text" id="name" required placeholder="Community Name">
                     <br>
                 </label>
-                <label>
+                <label class="community-label">
                     Description
                     <input type="text" name="description" id="description" placeholder="Description">
                     <br>
                 </label>
+                <p id="form-error" style="color: red;"></p>
                 <button type="submit">Submit</button>
             </form>
         </div>
 
+        <!--List of all communities-->
+
+        
         <div id="community-list"></div>
 
         <script src="../scripts/navbar.js"></script>

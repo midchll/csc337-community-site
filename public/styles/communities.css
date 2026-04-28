@@ -1,10 +1,14 @@
 body {
-    background-color: rgb(53, 235, 53);
-
+    background-color: whitesmoke;
 }
 
 #header {
-    background-color: rgb(252, 86, 172);
+    display: inline-block;  
+    color: orange;
+    flex-direction: row;
+}
+
+#community-button{
 
 }
 
@@ -14,4 +18,28 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 100;
+    background-color: white;
+    border: 2px orange solid;
+    padding: 20px;
 }
+
+#community-label{
+    padding-bottom: 10px;
+}
+
+#community-list{
+    margin: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.community-card{
+    border: 2px orange solid;
+    padding: 5px;
+
+}
+
+.community-description{
+    margin-left: 5px;
+}
+

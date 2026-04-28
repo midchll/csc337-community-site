@@ -10,7 +10,12 @@ async function getAllCommunities() {
 
 async function createCommunity(community) {
     const db = getDB();
-    return db.collection('communityCollection').insertOne(community)
+
+    const existing = await db.collection('communityCollection').findOne({ name: community.name });
+    if (existing) {
+        return { error: 'Community name already taken' };
+    }
+    return await db.collection('communityCollection').insertOne(community);
 }
 
 module.exports = { getAllCommunities, createCommunity };
