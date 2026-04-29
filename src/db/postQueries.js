@@ -2,10 +2,14 @@
 
 const { getDB } = require('./mongo');
 
-// TODO: create/find posts and other postCollection mongo queries
-async function getAllPosts() {
+async function getPostsByCommunity(communityId) {
     const db = getDB();
-    return db.collection('postsCollection').find().toArray();
+    return db.collection('postsCollection').find({ communityId }).toArray();
 }
 
-module.exports = { getAllPosts };
+async function createPost(post) {
+    const db = getDB();
+    return db.collection('postsCollection').insertOne(post);
+}
+
+module.exports = { getPostsByCommunity, createPost };

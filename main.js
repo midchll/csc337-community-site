@@ -47,10 +47,15 @@ app.get('/communitiespage', (req, res) => {
     res.sendFile(__dirname + '/public/pages/communities.html');
 });
 
+app.get('/postspage/:communityId', (req, res) => {
+    res.sendFile(__dirname + '/public/pages/posts.html');
+});
+
 
 
 //Routes
 app.use('/communities', require('./src/routes/communities'));
 app.use('/auth', require('./src/routes/auth'));
+app.use('/posts', require('./src/routes/posts'));
 
 startServer();

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            
+            // grab the community id from the url, e.g. /postspage/abc123 -> abc123
+            const communityId = window.location.pathname.split('/').pop();
+
+            // fetch and render all posts for this community
+            async function showPosts() {
+                await fetch('/posts/' + communityId)
+                .then((res) => { return res.json() })
+                .then((data) => {
+                    var div = document.getElementById('post-list')
+                    div.innerHTML = ''
+                    for (var post of data) {
+                        div.innerHTML = `<div class='post-card'><h3>${post.title}</h3><p>${post.content}</p></div>` + div.innerHTML
+                    }
+                })
+                .catch((error) => { console.log(error) })
+            }
+
+            // show the create post popup
+            function openForm() {
+                document.getElementById('popup').style.display = 'block'
+                document.getElementById('form-error').textContent = ''
+            }
+
+            // submit new post to the server
+            async function submitForm(e) {
+                e.preventDefault()
+                const res = await fetch('/posts/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: document.getElementById('title').value.trim(),
+                        content: document.getElementById('content').value.trim(),
+                        communityId: communityId
+                    })
+                })
+                const data = await res.json()
+                if (data.error) {
+                    document.getElementById('form-error').textContent = data.error
+                } else {
+                    closeForm()
+                }
+            }
+
+            // hide the popup and refresh the post list
+            function closeForm() {
+                showPosts()
+                document.getElementById('popup').style.display = 'none'
+            }
+        </script>
+    </head>
+    <body onload="showPosts()">
+        <div id="header">
+            <h1>Posts</h1>
+            <button onclick="openForm()">Create Post</button>
+        </div>
+
+        <!-- popup form to create a new post -->
+        <div id="popup" style="display: none;">
+            <form onsubmit="submitForm(event)">
+                <label>
+                    Title:
+                    <input type="text" id="title" required placeholder="Post Title">
+                    <br>
+                </label>
+                <label>
+                    Content:
+                    <input type="text" id="content" placeholder="Content">
+                    <br>
+                </label>
+                <p id="form-error" style="color: red;"></p>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <!-- post cards are injected here by showPosts() -->
+        <div id="post-list"></div>
+    </body>
+</html>
