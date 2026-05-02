@@ -2,24 +2,23 @@ function $(id) {
     return document.getElementById(id);
 }
 
-function handleLogoutClicked() {
+async function handleLogoutClicked() {
     try {
-        const response = fetch('/auth/logout');
-        if (!response.message) {
+        const response = await fetch('/auth/logout', {
+            method: "POST"
+        });
+        if (!response.ok) {
             console.log('Error trying to logout, you may not be signed in.');
             return;
         }
-    } catch (err) { console.log('Server error while logging out:', err); }
+        window.location.href = '/login';
+    } catch (err) {
+        console.log('Server error while logging out:', err);
+    }
 }
 
 async function handleCommunitiesClicked() {
-    try {
-        const response = await fetch('/communities');
-        if (!response.ok) {
-            console.log('Error trying to get communities page');
-            return;
-        }
-    } catch (err) { console.log('Server error trying to load communities page:', err); }
+    window.location.href = "/communitiespage";
 }
 
 async function handleProfileClicked() {
@@ -33,11 +32,15 @@ async function renderNavbar() {
 
     try {
         const response = await fetch("/session");
+        if (!response.ok) {
+            // No session redirect to login
+            window.location.href = "/login";
+            return;
+        }
         const session = await response.json();
-
-        if (!response.ok || !session.user) {
-            // User not logged in -> redirect to login at root
-            window.location.href="/login";
+        if (!session.user) {
+            // No user logged in, redirect to login
+            window.location.href = "/login";
             return;
         }
 
@@ -61,7 +64,7 @@ async function renderNavbar() {
 
 
     } catch (err) {
-        console.err("Error rendering navbar");
+        console.log("Error rendering navbar", err);
     }
 }
 

@@ -23,11 +23,11 @@ router.post('/create', async (req, res) => {
             password: hashed
         });
 
-        res.json({ message: 'User successfully created.' });
+        res.status(201).json({ message: 'User successfully created.' });
 
     } catch (err) {
         console.log(err);
-        res.json({ error: 'Error during user creation.' });
+        res.status(500).json({ error: 'Error during user creation.' });
     }
 });
 
@@ -65,7 +65,7 @@ router.post('/logout', (req, res) => {
             return res.status(500).json({ error: err });
         }
     });
-    res.json({ message: 'Successfully logged out.' });
+    return res.json({ message: 'Successfully logged out.' });
 });
 
 module.exports = router;

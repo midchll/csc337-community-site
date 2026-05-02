@@ -34,7 +34,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="checkExistingSession()">
     <main>
         <!-- --- ACCOUNT CREATION FORM --- -->
         <form id="create-account-form">
@@ -93,6 +93,21 @@
         // Shorthand
         function $(id) { return document.getElementById(id); }
 
+        // Check if logged in so if you backarrow while logged in you aren't taken
+        // to a filled out login page
+        async function checkExistingSession() {
+            try {
+                const response = await fetch('/session');
+                const session = await response.json();
+                // just redirecting back to communities page
+                if (session.user) {
+                    window.location.replace = "/communitiespage";
+                }
+            } catch (err) {
+                console.log("Server error getting session data", err);
+            }
+        }
+
         // Notify user of submission status
         function showStatus(status, msg, time_ms) {
             const element = $("status-message");
@@ -127,7 +142,7 @@
             const password = $("password-input-create").value.trim();
 
             if (!email || !password) {
-                showSatus("fail", "Please ensure all fields are filled. Username is optional.", 3000);
+                showStatus("fail", "Please ensure all fields are filled. Username is optional.", 3000);
                 return;
             }
 
@@ -181,6 +196,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             $("create-account-form").addEventListener("submit", submitCreate);
             $("login-form").addEventListener("submit", submitLogin);
+            checkExistingSession();
         });
     </script>
 </body>
