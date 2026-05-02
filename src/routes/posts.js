@@ -19,7 +19,8 @@ router.post("/create", async (req, res) => {
         const post = {
             title: req.body.title,
             content: req.body.content,
-            communityId: req.body.communityId
+            communityId: req.body.communityId,
+            replies: []
         };
         const response = await postQs.createPost(post);
         res.json(response);
@@ -28,5 +29,19 @@ router.post("/create", async (req, res) => {
         res.json({ error: "failed to create post" });
     }
 });
+
+
+router.post('/createReply', async (req, res) => {
+    try {
+        const reply = {
+            message: req.body.message
+        }
+        const response = await postQs.createReply(reply, req.body.postId)
+        res.json(response)
+    } catch (err) {
+        console.error("Error creating reply:", err);
+        res.json({ error: "failed to create reply" });
+    }
+})
 
 module.exports = router;
