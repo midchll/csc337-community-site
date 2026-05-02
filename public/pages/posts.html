@@ -2,7 +2,6 @@
 <html>
     <head>
         <script>
-            
             // grab the community id from the url, e.g. /postspage/abc123 -> abc123
             const communityId = window.location.pathname.split('/').pop();
 
@@ -54,6 +53,10 @@
         </script>
     </head>
     <body onload="showPosts()">
+        <nav>
+            <div id="nav-links"></div>
+        </nav>
+
         <div id="header">
             <h1>Posts</h1>
             <button onclick="openForm()">Create Post</button>
@@ -79,5 +82,7 @@
 
         <!-- post cards are injected here by showPosts() -->
         <div id="post-list"></div>
+
+        <script src="../scripts/navbar.js"></script>
     </body>
 </html>
