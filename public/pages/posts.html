@@ -14,11 +14,42 @@
                     var div = document.getElementById('post-list')
                     div.innerHTML = ''
                     for (var post of data) {
-                        div.innerHTML = `<div class='post-card'><h3>${post.title}</h3><p>${post.content}</p></div>` + div.innerHTML
+                        let replyHTML = ''
+                        for (var reply of post.replies || []) {
+                            replyHTML = `<p>${reply.message}</p>` + replyHTML
+                        }
+                        div.innerHTML = `
+                        <div class='post-card'">
+                            <h3>${post.title}</h3>
+                            <p>${post.content}</p>
+                            <div class='replies'>
+                                ${replyHTML}
+                                <form onsubmit="submitReplyForm(event, '${post._id}')">
+                                    <input type="text" placeholder="Write a reply..." required>
+                                    <button type="submit">Reply</button>
+                                </form>
+                            </div>
+                        </div>` + div.innerHTML
                     }
                 })
                 .catch((error) => { console.log(error) })
             }
+
+            async function submitReplyForm(e, postId) {
+                e.preventDefault()
+                const input = e.target.querySelector('input')  // fixed
+                await fetch('/posts/createReply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        postId: postId,
+                        message: input.value.trim()
+                    })
+                })
+                .catch((error) => { console.log(error) })
+                showPosts()
+            }
+            
 
             // show the create post popup
             function openForm() {

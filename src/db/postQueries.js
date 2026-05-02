@@ -1,6 +1,7 @@
 // post db queries
 
 const { getDB } = require('./mongo');
+const { ObjectId } = require('mongodb')
 
 async function getPostsByCommunity(communityId) {
     const db = getDB();
@@ -12,4 +13,12 @@ async function createPost(post) {
     return db.collection('postsCollection').insertOne(post);
 }
 
-module.exports = { getPostsByCommunity, createPost };
+async function createReply(reply, postId) {
+    const db = getDB();
+    return db.collection('postsCollection').updateOne(
+        {_id: new ObjectId(postId) },
+        { $push: {replies: reply} }
+    )
+}
+
+module.exports = { getPostsByCommunity, createPost, createReply };
