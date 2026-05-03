@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="/styles/posts.css">
         <script>
             // grab the community id from the url, e.g. /postspage/abc123 -> abc123
-            const communityId = window.location.pathname.split('/').pop();
+            const communityName = window.location.pathname.split('/').pop();
 
             // fetch and render all posts for this community
             async function showPosts() {
-                await fetch('/posts/' + communityId)
+                document.getElementById('header-name').innerText = communityName
+                await fetch('/posts/' + communityName)
                 .then((res) => { return res.json() })
                 .then((data) => {
                     var div = document.getElementById('post-list')
@@ -15,18 +17,18 @@
                     for (var post of data) {
                         let replyHTML = ''
                         for (var reply of post.replies || []) {
-                            replyHTML = `<p>${reply.message}</p>` + replyHTML
+                            replyHTML = `<p>${reply.user}: ${reply.message}</p>` + replyHTML
                         }
                         div.innerHTML = `
                         <div class='post-card'">
-                            <h3>${post.title}</h3>
+                            <h3>${post.user}: ${post.title}</h3>
                             <p>${post.content}</p>
                             <div class='replies'>
-                                ${replyHTML}
                                 <form onsubmit="submitReplyForm(event, '${post._id}')">
                                     <input type="text" placeholder="Write a reply..." required>
                                     <button type="submit">Reply</button>
                                 </form>
+                                ${replyHTML}
                             </div>
                         </div>` + div.innerHTML
                     }
@@ -65,7 +67,7 @@
                     body: JSON.stringify({
                         title: document.getElementById('title').value.trim(),
                         content: document.getElementById('content').value.trim(),
-                        communityId: communityId
+                        communityId: communityName
                     })
                 })
                 const data = await res.json()
@@ -89,7 +91,7 @@
         </nav>
 
         <div id="header">
-            <h1>Posts</h1>
+            <h1 id="header-name"></h1>
             <button onclick="openForm()">Create Post</button>
         </div>
 

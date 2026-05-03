@@ -21,8 +21,6 @@ router.post("/create", async (req, res) => {
             description: req.body.description,
         }
 
-
-
         const response = await communityQs.createCommunity(community);
         if (response.error) {
             return res.status(409).json(response);

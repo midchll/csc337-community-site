@@ -6,60 +6,42 @@
     <link rel="stylesheet" href="../styles/main.css">
     <title>Account Login</title>
     <style>
-        form {
-            display: flex;
-            flex-direction: column;
-            visibility: visible;
-            gap: 1em;
-        }
 
-        .disabled {
-            display: none;
-            visibility: collapse;
-        }
-
-        #status-message,
-        .submit-button,
-        button {
-            width: fit-content;
-        }
-
-        .status-good {
-            background-color: green;
-            color: white;
-        }
-        .status-bad {
-            background-color: red;
-            color: white;
-        }
     </style>
 </head>
 <body onload="checkExistingSession()">
     <main>
+        <div id="header">
+            <h1>Communities R Us</h1>
+        </div>
         <!-- --- ACCOUNT CREATION FORM --- -->
         <form id="create-account-form">
             <p class="form-heading">Create Account</p>
 
             <!-- EMAIL -->
             <span class="form-group" id="email-group-create">
-                <label for="email-input-create">Email</label>
+                <label for="email-input-create">Email:</label>
                 <input type="email" name="email" id="email-input-create" placeholder="name@example.com">
+                <br>
             </span>
 
             <!-- NAME -->
              <span class="form-group" id="name-group-create">
-                <label for="name-input-create">Username</label>
+                <label for="name-input-create">Username:</label>
                 <input type="text" name="name" id="name-input-create">
+                <br>
             </span>
 
             <!-- PASSWORD -->
              <span class="form-group" id="password-group-create">
-                <label for="password-input-create">Password</label>
+                <label for="password-input-create">Password:</label>
                 <input type="password" name="password" id="password-input-create">
+                <br>
             </span>
 
             <input class="submit-button" type="submit" value="Submit">
-
+            <br>
+            
             <button type="button" onclick="toggleForm('login-form')">I already have an account</button>
         </form>
 

@@ -12,15 +12,15 @@
                     var div = document.getElementById('community-list')
                     div.innerHTML = ''
                     for(var community of data){
-                        div.innerHTML = `<div class='community-card' onclick="openCommunity('${community._id}')"><div class='community-name'><h3>${community.name}</h3></div><div class='community-description'><p>${community.description}</p></div></div>` + div.innerHTML
+                        div.innerHTML = `<div class='community-card' onclick="openCommunity('${community.name}')"><div class='community-name'><h3>${community.name}</h3></div><div class='community-description'><p>${community.description}</p></div></div>` + div.innerHTML
                     }
                 })
                 .catch((error) => {console.log(error)})
             }
 
             //
-            async function openCommunity(id) {
-                window.location.href = `/postspage/${id}`
+            async function openCommunity(name) {
+                window.location.href = `/postspage/${name}`
             }
 
             //Display pop up form
@@ -63,7 +63,7 @@
 
         <div>
         <div id="header">
-            <h1>Communities</h1>
+            <h1>Communities R Us</h1>
             <button id="community-button" onclick="openForm()">Create Community</button>
         </div>
 

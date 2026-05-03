@@ -3,13 +3,9 @@ body {
 }
 
 #header {
-    display: inline-block;  
+    display: inline-block;
     color: orange;
     flex-direction: row;
-}
-
-#community-button{
-
 }
 
 #popup {
@@ -24,23 +20,18 @@ body {
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-#community-label{
-    padding-bottom: 10px;
-}
-
-#community-list{
+#post-list {
     margin: 25px;
     display: flex;
     flex-direction: column;
 }
 
-.community-card{
+.post-card {
     border: 2px orange solid;
     padding: 5px;
-
+    margin-bottom: 10px;
 }
 
-.community-description{
+.replies {
     margin-left: 5px;
 }
-
