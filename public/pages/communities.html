@@ -3,20 +3,33 @@
     <head>
         <link rel="stylesheet" href="/styles/communities.css">
         <script>
+            let communities = []
+            let filtered = []
+
+            function showCommunities() {
+                var div = document.getElementById('community-list')
+                div.innerHTML = ''
+                for(var community of filtered){
+                    div.innerHTML = `<div class='community-card' onclick="openCommunity('${community.name}')"><div class='community-name'><h3>${community.name}</h3></div><div class='community-description'><p>${community.description}</p></div></div>` + div.innerHTML
+                }
+            }
 
             //show all communities in the list
-            async function showCommunities() {
+            async function getCommunities() {
                 await fetch('/communities')
                 .then((res) => {return res.json()})
                 .then((data) => {
-                    var div = document.getElementById('community-list')
-                    div.innerHTML = ''
-                    for(var community of data){
-                        div.innerHTML = `<div class='community-card' onclick="openCommunity('${community.name}')"><div class='community-name'><h3>${community.name}</h3></div><div class='community-description'><p>${community.description}</p></div></div>` + div.innerHTML
+                    communities = []
+                    for (var community of data) {
+                        communities.push(community);
                     }
+                    filtered = communities
+                    showCommunities();
                 })
                 .catch((error) => {console.log(error)})
             }
+
+
 
             //
             async function openCommunity(name) {
@@ -50,12 +63,20 @@
 
             //close the form
             function closeForm() {
-                showCommunities();
+                getCommunities();
+                filterCommunities();
                 document.getElementById('popup').style.display = 'none';
+            }
+
+            function filterCommunities() {
+                const value = document.getElementById('communities-search').value
+                filtered = communities
+                filtered = filtered.filter(c => c.name.toLowerCase().includes(value));
+                showCommunities();
             }
         </script>
     </head>
-    <body onload="showCommunities()">
+    <body onload="getCommunities()">
 
         <nav>
             <div id="nav-links"></div>
@@ -65,6 +86,7 @@
         <div id="header">
             <h1>Communities R Us</h1>
             <button id="community-button" onclick="openForm()">Create Community</button>
+            <input oninput="filterCommunities()" type="text" id="communities-search" placeholder="Search">
         </div>
 
         <!--Pop up form to make community-->
