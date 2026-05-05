@@ -46,6 +46,6 @@ _(This project contains a package.json, dependencies can be installed with `npm 
 ### Startup
 1. Install required packages listed above
 2. Run database seeding script (optional) `node src/testing/insertDocs.js`\
-This inserts some mock accounts and other data to the database for for demonstration purposes
+This inserts some mock accounts and other data into the database for demonstration purposes
 3. Start server `node main.js`\
 The app will be accessible at http://localhost:8080
