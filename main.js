@@ -47,6 +47,10 @@ app.get('/postspage/:communityId', (req, res) => {
     res.sendFile(__dirname + '/public/pages/posts.html');
 });
 
+app.get('/profilepage', (req, res) => {
+    res.sendFile(__dirname + '/public/pages/profile.html');
+});
+
 
 
 //Routes

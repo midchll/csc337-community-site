@@ -21,4 +21,9 @@ async function createReply(reply, postId) {
     )
 }
 
-module.exports = { getPostsByCommunity, createPost, createReply };
+async function getAllPostsByUser(userName) {
+    const db = getDB();
+    return db.collection('postsCollection').find({ user: userName }).toArray();
+}
+
+module.exports = { getPostsByCommunity, createPost, createReply, getAllPostsByUser };

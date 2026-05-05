@@ -22,7 +22,7 @@ async function handleCommunitiesClicked() {
 }
 
 async function handleProfileClicked() {
-    // IMPLEMENT
+    window.location.href = "/profilepage";
 }
 
 async function renderNavbar() {
@@ -55,12 +55,12 @@ async function renderNavbar() {
         logoutLink.addEventListener("click", handleLogoutClicked);
 
         const profileLink = document.createElement("button");
-        profileLink.innerText = "Profile (WIP)";
+        profileLink.innerText = "Profile";
         profileLink.addEventListener("click", handleProfileClicked);
 
         navlinks.appendChild(communitiesLink);
-        navlinks.appendChild(logoutLink);
         navlinks.appendChild(profileLink);
+        navlinks.appendChild(logoutLink);
 
 
     } catch (err) {

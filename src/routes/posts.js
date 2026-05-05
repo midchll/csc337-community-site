@@ -2,6 +2,17 @@ var express = require('express');
 var router = express.Router();
 const postQs = require('../db/postQueries');
 
+// Gets all posts by the logged-in user
+router.get('/getAllPostsOfUser', async (req, res) => {
+    try {
+        const response = await postQs.getAllPostsByUser(req.session.user.name);
+        res.json(response);
+    } catch (err) {
+        console.error("Error getting posts:", err);
+        res.json({ error: "failed to get posts" });
+    }
+});
+
 // Gets all posts for a community
 router.get("/:communityName", async (req, res) => {
     try {
@@ -45,5 +56,6 @@ router.post('/createReply', async (req, res) => {
         res.json({ error: "failed to create reply" });
     }
 })
+
 
 module.exports = router;

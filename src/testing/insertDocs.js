@@ -21,7 +21,7 @@ async function insertDocuments() {
         // Resets, clears existing data if you were to call insertion again
         await db.collection("userCollection").deleteMany({});
         await db.collection("communityCollection").deleteMany({});
-        await db.collection("postCollection").deleteMany({});
+        await db.collection("postsCollection").deleteMany({});
         console.log("reset collections");
 
 

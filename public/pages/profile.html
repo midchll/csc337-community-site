@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/styles/profile.css">
+        <link rel="stylesheet" href="/styles/navbar.css">
+        <script>
+            // fetch and render all posts for this community
+            async function showPosts() {
+                const sessionRes = await fetch('/session');
+                const session = await sessionRes.json();
+                document.getElementById('header-name').innerText = session.user.name;
+
+                await fetch('/posts/getAllPostsOfUser')
+                .then((res) => { return res.json() })
+                .then((data) => {
+                    var div = document.getElementById('post-list')
+                    div.innerHTML = ''
+                    for (var post of data) {
+                        let replyHTML = ''
+                        for (var reply of post.replies || []) {
+                            replyHTML = `<p>${reply.user}: ${reply.message}</p>` + replyHTML
+                        }
+                        div.innerHTML = `
+                        <div class='post-card'">
+                            <h3>${post.user}: ${post.title}</h3>
+                            <p>${post.content}</p>
+                            <div class='replies'>
+                                <form onsubmit="submitReplyForm(event, '${post._id}')">
+                                    <input type="text" placeholder="Write a reply..." required>
+                                    <button type="submit">Reply</button>
+                                </form>
+                                ${replyHTML}
+                            </div>
+                        </div>` + div.innerHTML
+                    }
+                })
+                .catch((error) => { console.log(error) })
+            }
+
+            async function submitReplyForm(e, postId) {
+                e.preventDefault()
+                const input = e.target.querySelector('input')  // fixed
+                await fetch('/posts/createReply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        postId: postId,
+                        message: input.value.trim()
+                    })
+                })
+                .catch((error) => { console.log(error) })
+                showPosts()
+            }
+        </script>
+    </head>
+    <body onload="showPosts()">
+        <nav>
+            <div id="nav-links"></div>
+        </nav>
+
+        <div id="header">
+            <h1 id="header-name"></h1>
+        </div>
+
+        <div id="post-list"></div>
+
+        <script src="../scripts/navbar.js"></script>
+    </body>
+</html>
