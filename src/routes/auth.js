@@ -49,7 +49,6 @@ router.post('/login', async (req, res) => {
         }
         // Success, assign id to session
         req.session.user = { id: storedUser._id, name: storedUser.name, email: storedUser.email };
-        console.log(req.session.user);
         return res.json({ message: 'Login Successful' });
 
     } catch (err) {

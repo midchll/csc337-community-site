@@ -17,6 +17,7 @@ The structured project source can be viewed at https://github.com/midchll/csc337
 │   └── styles
 │       ├── communities.css
 │       ├── main.css
+│       ├── navbar.css
 │       └── posts.css
 ├── src
 │   ├── db
