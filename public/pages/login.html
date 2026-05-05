@@ -84,7 +84,7 @@
                 const session = await response.json();
                 // just redirecting back to communities page
                 if (session.user) {
-                    window.location.replace = "/communitiespage";
+                    window.location.replace("/communitiespage");
                 }
             } catch (err) {
                 console.log("Server error getting session data", err);
