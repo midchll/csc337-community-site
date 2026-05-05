@@ -9,7 +9,7 @@
 
             // fetch and render all posts for this community
             async function showPosts() {
-                document.getElementById('header-name').innerText = communityName
+                document.getElementById('header-name').innerText = decodeURIComponent(communityName)
                 await fetch('/posts/' + communityName)
                 .then((res) => { return res.json() })
                 .then((data) => {
