@@ -33,9 +33,7 @@ form {
     visibility: collapse;
 }
 
-#status-message,
-.submit-button,
-button {
+#status-message {
     width: fit-content;
 }
 
