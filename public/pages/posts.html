@@ -22,7 +22,7 @@
                         }
                         div.innerHTML = `
                         <div class='post-card'">
-                            <h3>${post.user}: ${post.title}</h3>
+                            <h3>${post.user}: ${post.title} · <small>${new Date(post.timestamp).toLocaleString()} </small></h3>
                             <p>${post.content}</p>
                             <div class='replies'>
                                 <form onsubmit="submitReplyForm(event, '${post._id}')">

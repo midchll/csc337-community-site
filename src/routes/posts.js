@@ -32,6 +32,7 @@ router.post("/create", async (req, res) => {
             content: req.body.content,
             communityId: req.body.communityId,
             user: req.session.user.name,
+            timestamp: new Date(),
             replies: []
         };
         const response = await postQs.createPost(post);
